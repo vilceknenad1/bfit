@@ -58,7 +58,11 @@
     [data-pad] { padding-left: 20px !important; padding-right: 20px !important; }
     section:not(#pocetna) { padding-top: 80px !important; padding-bottom: 80px !important; }
     #prica > [data-pad] > div:nth-of-type(3) { gap: 0 !important; }
-    [data-hero-grid] { grid-template-columns: 1fr !important; padding: 108px 20px 72px !important; }
+    [data-hero-grid] { grid-template-columns: minmax(0,1fr) !important; padding: 108px 20px 72px !important; }
+    [data-hero-grid] > div { min-width: 0; }
+    [data-hero-grid] p, [data-hero-grid] h1 { max-width: 100% !important; }
+    [data-pad] > div, [data-pad] p, [data-pad] h2, [data-pad] h3, [data-pad] blockquote { max-width: 100% !important; }
+    html, body { overflow-x: hidden; max-width: 100%; }
     #pocetna { min-height: 0 !important; }
     [data-about] { grid-template-columns: minmax(0,1fr) !important; min-height: 0 !important; }
     [data-about] > div:last-child { padding: 44px 20px 0 !important; min-width: 0; }
