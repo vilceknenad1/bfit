@@ -81,7 +81,10 @@
     [data-stats] > div { padding: 22px 18px !important; border-left: none !important; border-top: 1px solid rgba(214,169,74,.18); }
     [data-stats] > div:last-child { grid-column: 1 / -1; justify-content: flex-start !important; padding-left: 18px !important; }
     [data-goals-grid] { display: flex !important; overflow-x: auto; scroll-snap-type: x mandatory; gap: 14px; padding-bottom: 6px; }
-    [data-goals-grid] > a { flex: 0 0 62vw; max-width: 320px; aspect-ratio: auto !important; height: 58vh; max-height: 520px; scroll-snap-align: start; }
+    html, body { touch-action: manipulation; -webkit-tap-highlight-color: transparent; -webkit-text-size-adjust: 100%; }
+    a, button { -webkit-tap-highlight-color: transparent; }
+    [data-goals-grid] > a, [data-goals-grid] > a > div { animation: none !important; clip-path: none !important; transform: none !important; transition: none !important; }
+    [data-goals-grid] > a { flex: 0 0 58vw; max-width: 270px; height: auto; scroll-snap-align: start; }
     [data-proces] { display: flex !important; overflow-x: auto; scroll-snap-type: x mandatory; gap: 14px !important; padding-bottom: 6px; scrollbar-width: none; }
     [data-proces]::-webkit-scrollbar { display: none; }
     [data-proces] > div:nth-child(-n+2) { display: none !important; }
@@ -285,7 +288,7 @@
       <div style="position:relative">
       <div data-goals-grid="1" data-hide-scrollbar="1" style="margin-top:54px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px">
         <sc-for list="{{ goals }}" as="g" hint-placeholder-count="5">
-          <a href="#usluge" style="position:relative;display:block;aspect-ratio:315/734;overflow:hidden;animation:bf-mask 1s ease both;animation-timeline:view();animation-range:entry 0% cover 20%">
+          <a href="#usluge" style="position:relative;display:block;aspect-ratio:282/788;overflow:hidden;animation:bf-mask 1s ease both;animation-timeline:view();animation-range:entry 0% cover 20%">
             <div style="position:absolute;inset:0;transition:transform .8s cubic-bezier(.2,.7,.2,1)" style-hover="transform:scale(1.05)">
               <image-slot id="{{ g.slot }}" shape="rect" src="{{ g.src }}" placeholder="{{ g.hint }}"></image-slot>
             </div>
@@ -296,10 +299,10 @@
                 <div style="font-family:Anton, sans-serif;font-size:22px;letter-spacing:.06em;color:#E4BE68;line-height:1">{{ g.num }}</div>
                 <div style="margin-top:10px;width:30px;height:1px;background:rgba(214,169,74,.8)"></div>
               </div>
-              <div style="position:absolute;left:20px;right:16px;bottom:16px;pointer-events:none">
-                <div style="font-family:Anton, sans-serif;font-size:26px;line-height:1.2;text-transform:uppercase;color:#FFFFFF">{{ g.l1 }}</div>
-                <div style="font-family:Anton, sans-serif;font-size:26px;line-height:1.2;text-transform:uppercase;color:#E4BE68">{{ g.l2 }}</div>
-                <div style="margin-top:22px;width:45px;height:45px;border:1px solid rgba(214,169,74,.85);display:grid;place-items:center;color:#E4BE68;font-size:15px">→</div>
+              <div data-goal-ov="1" style="position:absolute;left:20px;right:16px;bottom:16px;pointer-events:none">
+                <div data-goal-l="1" style="font-family:Anton, sans-serif;font-size:26px;line-height:1.2;text-transform:uppercase;color:#FFFFFF">{{ g.l1 }}</div>
+                <div data-goal-l="1" style="font-family:Anton, sans-serif;font-size:26px;line-height:1.2;text-transform:uppercase;color:#E4BE68">{{ g.l2 }}</div>
+                <div data-goal-arrow="1" style="margin-top:22px;width:45px;height:45px;border:1px solid rgba(214,169,74,.85);display:grid;place-items:center;color:#E4BE68;font-size:15px">→</div>
               </div>
             </sc-if>
           </a>
@@ -764,11 +767,11 @@ class Component extends DCLogic {
       fMla: f === "mladi" ? BTN_ON : BTN,
       schedule,
       goals: [
-        { num: "01", slot: "bfit-goal4", src: "./cilj-04.png?v=2", hint: "01 · Stručno vođenje", overlay: true, l1: "ŽELIM", l2: "STRUČNO VOĐENJE." },
-        { num: "02", slot: "bfit-goal1", src: "./cilj-01.png", hint: "02 · Želim rezultat" },
-        { num: "03", slot: "bfit-goal2", src: "./cilj-02.png", hint: "03 · Imam bol" },
-        { num: "04", slot: "bfit-goal3", src: "./cilj-03.png", hint: "04 · Vratim treningu" },
-        { num: "05", slot: "bfit-goal5", src: "./cilj-05.png", hint: "05 · Trening za decu" }
+        { num: "01", slot: "bfit-goal1", src: "./cilj-n1.png", hint: "01 · Stručno vođenje" },
+        { num: "02", slot: "bfit-goal2", src: "./cilj-n2.png", hint: "02 · Imam bol" },
+        { num: "03", slot: "bfit-goal3", src: "./cilj-n3.png", hint: "03 · Želim rezultat" },
+        { num: "04", slot: "bfit-goal4", src: "./cilj-n4.png", hint: "04 · Vratim treningu" },
+        { num: "05", slot: "bfit-goal5", src: "./cilj-n5.png", hint: "05 · Trening za decu" }
       ],
       servicesTop: SERVICES.slice(0, 4),
       servicesBottom: SERVICES.slice(4),
