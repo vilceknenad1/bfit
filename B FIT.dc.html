@@ -47,6 +47,7 @@
   @keyframes bf-lineY { from { transform: scaleY(0); } to { transform: scaleY(1); } }
   @keyframes bf-lineX { from { transform: scaleX(0); } to { transform: scaleX(1); } }
   @keyframes bf-fade { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes bf-nudge { 0%,100% { transform: translateX(0); } 50% { transform: translateX(8px); } }
   @keyframes bf-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
   [data-mob-only] { display: none; }
   [data-hide-scrollbar]::-webkit-scrollbar { display: none; }
@@ -62,7 +63,11 @@
     [data-hero-grid] > div { min-width: 0; }
     [data-hero-grid] p, [data-hero-grid] h1 { max-width: 100% !important; }
     [data-pad] > div, [data-pad] p, [data-pad] h2, [data-pad] h3, [data-pad] blockquote { max-width: 100% !important; }
-    html, body { overflow-x: hidden; max-width: 100%; }
+    html, body { overflow-x: hidden; max-width: 100%; width: 100%; }
+    section, header, footer { max-width: 100vw; overflow-x: clip; }
+    [data-pad] { max-width: 100% !important; }
+    [data-results-track] { padding-left: 20px !important; padding-right: 20px !important; }
+    p, h1, h2, h3, blockquote, li { overflow-wrap: anywhere; }
     #pocetna { min-height: 0 !important; }
     [data-about] { grid-template-columns: minmax(0,1fr) !important; min-height: 0 !important; }
     [data-about] > div:last-child { padding: 44px 20px 0 !important; min-width: 0; }
@@ -76,17 +81,23 @@
     [data-stats] > div { padding: 22px 18px !important; border-left: none !important; border-top: 1px solid rgba(214,169,74,.18); }
     [data-stats] > div:last-child { grid-column: 1 / -1; justify-content: flex-start !important; padding-left: 18px !important; }
     [data-goals-grid] { display: flex !important; overflow-x: auto; scroll-snap-type: x mandatory; gap: 14px; padding-bottom: 6px; }
-    [data-goals-grid] > a { flex: 0 0 84vw; scroll-snap-align: start; }
-    [data-proces] { grid-template-columns: minmax(0,1fr) !important; gap: 0 !important; }
+    [data-goals-grid] > a { flex: 0 0 62vw; max-width: 320px; aspect-ratio: auto !important; height: 58vh; max-height: 520px; scroll-snap-align: start; }
+    [data-goals-grid] > a:nth-child(4) { order: -1; }
+    [data-proces] { display: flex !important; overflow-x: auto; scroll-snap-type: x mandatory; gap: 14px !important; padding-bottom: 6px; scrollbar-width: none; }
+    [data-proces]::-webkit-scrollbar { display: none; }
     [data-proces] > div:nth-child(-n+2) { display: none !important; }
-    [data-proces] > div:nth-child(n+3) { padding: 26px 0 26px 22px !important; border-left: 1px solid rgba(214,169,74,.28); }
+    [data-proces] > div:nth-child(n+3) { flex: 0 0 66vw; max-width: 300px; scroll-snap-align: start; padding: 22px 0 0 18px !important; border-left: 1px solid rgba(214,169,74,.28); }
     [data-proces] > div p { max-width: none !important; }
+    [data-proces-title] { margin-bottom: 40px !important; }
     [data-story] { flex-direction: column; gap: 0 !important; }
     [data-story] > div { flex: 1 1 auto !important; }
     header { padding: 12px 20px !important; }
     [data-results-track] > div { flex: 0 0 88vw !important; }
     [data-footer-word] { font-size: 22vw !important; }
     #kontakt { padding-top: 96px !important; padding-bottom: 120px !important; }
+    [data-cta-bg] { position: relative !important; inset: auto !important; width: 100%; aspect-ratio: 4/5; margin: 0 0 34px; overflow: hidden; }
+    [data-cta-grad] { display: none !important; }
+    #kontakt { background: #050505 !important; }
     [data-cta-info] { grid-template-columns: minmax(0,1fr) !important; gap: 0 !important; margin-top: 56px !important; }
     [data-cta-info] > div { padding: 22px 0; border-bottom: 1px solid rgba(214,169,74,.14); min-width: 0; }
     [data-cta-info] > div:last-child { border-bottom: none; }
@@ -257,6 +268,7 @@
         </div>
         <h2 style="margin:0;font-family:Anton, sans-serif;font-weight:400;font-size:clamp(34px,4vw,68px);line-height:1.22;text-transform:uppercase;animation:bf-rise .9s ease both;animation-timeline:view();animation-range:entry 0% cover 22%">IZABERI SVOJ CILJ</h2>
       </div>
+      <div style="position:relative">
       <div data-goals-grid="1" data-hide-scrollbar="1" style="margin-top:54px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px">
         <sc-for list="{{ goals }}" as="g" hint-placeholder-count="5">
           <a href="#usluge" style="position:relative;display:block;aspect-ratio:315/734;overflow:hidden;animation:bf-mask 1s ease both;animation-timeline:view();animation-range:entry 0% cover 20%">
@@ -271,17 +283,23 @@
                 <div style="margin-top:10px;width:30px;height:1px;background:rgba(214,169,74,.8)"></div>
               </div>
               <div style="position:absolute;left:22px;right:22px;bottom:22px;pointer-events:none">
-                <div style="font-family:Anton, sans-serif;font-size:clamp(18px,1.5vw,26px);line-height:1.18;text-transform:uppercase;color:#F2EEE6">{{ g.l1 }}</div>
-                <div style="font-family:Anton, sans-serif;font-size:clamp(18px,1.5vw,26px);line-height:1.18;text-transform:uppercase;color:#E4BE68">{{ g.l2 }}</div>
+                <div style="font-family:Anton, sans-serif;font-size:clamp(27px,2.3vw,40px);line-height:1.18;text-transform:uppercase;color:#F2EEE6">{{ g.l1 }}</div>
+                <div style="font-family:Anton, sans-serif;font-size:clamp(27px,2.3vw,40px);line-height:1.18;text-transform:uppercase;color:#E4BE68">{{ g.l2 }}</div>
                 <div style="margin-top:20px;width:52px;height:52px;border:1px solid rgba(214,169,74,.85);display:grid;place-items:center;color:#E4BE68;font-size:15px">→</div>
               </div>
             </sc-if>
           </a>
         </sc-for>
       </div>
+        <div data-mob-only="1" style="position:absolute;top:50%;right:6px;transform:translateY(-50%);pointer-events:none;z-index:5">
+          <span style="display:grid;place-items:center;width:42px;height:42px;border-radius:50%;background:rgba(8,8,8,.72);border:1px solid rgba(214,169,74,.6);color:#E4BE68;font-size:15px;animation:bf-nudge 1.6s ease-in-out infinite">→</span>
+        </div>
+      </div>
       <div style="margin-top:34px;display:flex;align-items:center;justify-content:space-between;gap:24px;border-top:1px solid rgba(214,169,74,.18);padding-top:22px">
         <div style="font-size:11.5px;letter-spacing:.22em;color:#A5A19A;font-weight:600">RAZLIČITI CILJEVI. JEDAN PRISTUP: STRUČNOST.</div>
-        <div data-mob-only="1" style="font-size:11.5px;letter-spacing:.22em;color:#E4BE68;font-weight:700">PREVUCI →</div>
+        <div data-mob-only="1" data-mob-flex="1" style="align-items:center;gap:10px;font-size:11.5px;letter-spacing:.22em;color:#E4BE68;font-weight:700">PREVUCI
+          <span style="display:inline-block;animation:bf-nudge 1.6s ease-in-out infinite">→</span>
+        </div>
         <div data-desk-only="1" style="font-size:11.5px;letter-spacing:.22em;color:#E4BE68;font-weight:700">SKROLUJ DALJE ↓</div>
       </div>
     </div>
@@ -402,10 +420,16 @@
     </div>
   </section>
 
+  <div data-pad="1" style="max-width:1660px;margin:0 auto;padding:0 48px">
+      <div data-mob-only="1" data-mob-flex="1" style="margin-top:14px;align-items:center;justify-content:flex-end;gap:10px;font-size:11px;letter-spacing:.22em;color:#E4BE68;font-weight:700">PREVUCI
+        <span style="display:grid;place-items:center;width:34px;height:34px;border:1px solid rgba(214,169,74,.45);color:#E4BE68;font-size:13px;animation:bf-nudge 1.6s ease-in-out infinite">→</span>
+      </div>
+  </div>
+
   <section data-screen-label="06 Proces" style="background:#080808;padding:130px 0">
     <div data-pad="1" style="max-width:1660px;margin:0 auto;padding:0 48px">
       <div style="font-size:11px;letter-spacing:.3em;color:#D6A94A;font-weight:700">06 · PROCES</div>
-      <h2 style="margin:22px 0 76px;font-family:Anton, sans-serif;font-weight:400;font-size:clamp(34px,4.4vw,76px);line-height:1.22;text-transform:uppercase;max-width:1100px">OD PRVOG RAZGOVORA<br><span style="color:#E4BE68">DO TVOG REZULTATA.</span></h2>
+      <h2 data-proces-title="1" style="margin:22px 0 76px;font-family:Anton, sans-serif;font-weight:400;font-size:clamp(34px,4.4vw,76px);line-height:1.22;text-transform:uppercase;max-width:1100px">OD PRVOG RAZGOVORA<br><span style="color:#E4BE68">DO TVOG REZULTATA.</span></h2>
       <div data-proces="1" style="position:relative;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:24px">
         <div style="position:absolute;top:0;left:0;right:0;height:1px;background:rgba(214,169,74,.18)"></div>
         <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,#D6A94A,#E4BE68);transform-origin:left;animation:bf-lineX 1s linear both;animation-timeline:view();animation-range:entry 20% cover 60%"></div>
@@ -416,6 +440,9 @@
             <p style="margin:14px 0 0;font-size:14px;line-height:1.7;color:#A5A19A;max-width:250px">{{ p.desc }}</p>
           </div>
         </sc-for>
+      </div>
+      <div data-mob-only="1" data-mob-flex="1" style="margin-top:14px;align-items:center;justify-content:flex-end;gap:10px;font-size:11px;letter-spacing:.22em;color:#E4BE68;font-weight:700">PREVUCI
+        <span style="display:grid;place-items:center;width:34px;height:34px;border:1px solid rgba(214,169,74,.45);color:#E4BE68;font-size:13px;animation:bf-nudge 1.6s ease-in-out infinite">→</span>
       </div>
     </div>
   </section>
@@ -474,11 +501,12 @@
   </section>
 
   <section id="kontakt" data-screen-label="08 CTA" style="position:relative;background:#050505;padding:140px 0 110px;border-top:1px solid rgba(214,169,74,.2);overflow:hidden">
-    <div style="position:absolute;inset:0">
+    <div data-cta-bg="1" style="position:absolute;inset:0">
+      <div data-mob-only="1" style="position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(180deg,rgba(5,5,5,.55) 0%,rgba(5,5,5,0) 30%,rgba(5,5,5,.2) 60%,rgba(5,5,5,.96) 100%)"></div>
       <image-slot id="bfit-cta-bg" shape="rect" src="./cta-pozadina.png" placeholder="CTA pozadina · trening u B FIT studiju"></image-slot>
     </div>
-    <div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(5,5,5,.97) 0%,rgba(5,5,5,.9) 42%,rgba(5,5,5,.55) 72%,rgba(5,5,5,.4) 100%)"></div>
-    <div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(5,5,5,.8) 0%,rgba(5,5,5,.25) 35%,rgba(5,5,5,.95) 100%)"></div>
+    <div data-cta-grad="1" style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(5,5,5,.97) 0%,rgba(5,5,5,.9) 42%,rgba(5,5,5,.55) 72%,rgba(5,5,5,.4) 100%)"></div>
+    <div data-cta-grad="1" style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(5,5,5,.8) 0%,rgba(5,5,5,.25) 35%,rgba(5,5,5,.95) 100%)"></div>
     <div style="position:relative;z-index:2;max-width:1660px;margin:0 auto;padding:0 48px">
       <h2 style="margin:0;font-family:Anton, sans-serif;font-weight:400;font-size:clamp(42px,6.6vw,124px);line-height:1.22;text-transform:uppercase;animation:bf-rise .9s ease both;animation-timeline:view();animation-range:entry 0% cover 25%">NE ČEKAJ<br>“PRAVI TRENUTAK.”</h2>
       <h3 style="margin:34px 0 0;font-family:Anton, sans-serif;font-weight:400;font-size:clamp(26px,3.2vw,56px);line-height:1.22;text-transform:uppercase;color:#E4BE68">OVDE POČINJE<br>TVOJ NAPREDAK.</h3>
@@ -618,6 +646,13 @@ class Component extends DCLogic {
       this.track.addEventListener("pointerup", end);
       this.track.addEventListener("pointercancel", end);
       this.track.style.cursor = "grab";
+      const holdThenResume = () => {
+        this.paused = true;
+        clearTimeout(this._resumeT);
+        this._resumeT = setTimeout(() => { this.paused = false; }, 2500);
+      };
+      this.track.addEventListener("touchstart", holdThenResume, { passive: true });
+      this.track.addEventListener("touchend", holdThenResume, { passive: true });
     }
     this.onStickyScroll = () => {
       const cta = document.getElementById("kontakt");
