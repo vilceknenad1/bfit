@@ -88,6 +88,9 @@
     [data-cta-info] > div:last-child { border-bottom: none; }
     body { padding-bottom: 0; }
   }
+  @media (hover: none) {
+    [data-goals-grid] > a > div, [data-serv-card] > div > div { transform: none !important; transition: none !important; }
+  }
   @media (prefers-reduced-motion: reduce) {
     * { animation-duration: .001s !important; animation-delay: 0s !important; }
   }
@@ -194,7 +197,7 @@
 
       <div data-mob-only="1" style="margin-top:36px;position:relative">
         <div style="position:relative;width:100%;aspect-ratio:4/5;overflow:hidden;background:#080808">
-          <image-slot id="bfit-hero-mob" shape="rect" src="./hero-budimir.png" placeholder="Hero foto · Budimir"></image-slot>
+          <image-slot id="bfit-hero-mob" shape="rect" fit="cover" src="./hero-budimir.png" placeholder="Hero foto · Budimir"></image-slot>
           <div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(8,8,8,.75) 0%,rgba(8,8,8,0) 26%,rgba(8,8,8,0) 62%,rgba(8,8,8,.92) 100%)"></div>
         </div>
         <a href="#raspored" style="margin-top:22px;display:inline-flex;align-items:center;gap:14px">
